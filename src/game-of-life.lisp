@@ -1,9 +1,12 @@
-; 1. get cell
-; 2. create game
-; 3. render (once)
-; 4. next generation
-; 5. render & update, try with sample
-; 6. load/save string representation
+; 1. render (once)
+; 2. next generation
+; 3. render & update, try with sample
+; 4. load/save string representation
+; 5. some way to compare grid, that's what's needed for GA
+; 6. basic GA
+; 7. apply GA to the target problem
+; ?. at some point, need tool to convert images; rescale, make pixelated black+white, save to string
+; ?. allow non NxN grid
 
 (defconstant LIVE 'LIVE)
 (defconstant DEAD 'DEAD)
@@ -25,19 +28,16 @@
           (size (life-size life)))
         (aref grid (mod row size) (mod col size))))
 
-(print (life-grid (life-from-lists (list (list LIVE LIVE) (list DEAD LIVE)))))
-
-#|
-(let ((life (life-from-lists (list (list LIVE LIVE) (list DEAD LIVE)))))
+(print (let ((life (life-from-lists (list (list LIVE LIVE) (list DEAD LIVE)))))
     (mapcar (lambda (rowcol)
-            (apply (lambda (row col) (life-get-cell life row col))
-                   rowcol))
-        '(((- 1) (- 1))
-          ((- 1) 0)
-          (0 0)
-          (1 0)
-          (1 1)
-          (2 2)
-          (2 1)
-          (2 0))))
-|# 
+                (apply (lambda (row col) (life-get-cell life row col))
+                       rowcol))
+        (list
+            (list (- 1) (- 1))
+            (list (- 1) 0)
+            (list 0 0)
+            (list 1 0)
+            (list 1 1)
+            (list 2 2)
+            (list 2 1)
+            (list 2 0)))))
