@@ -1,5 +1,5 @@
-; 1. render (once)
-; 2. next generation
+; 1. seriously consider representation of grid & decide on final one.
+; 2. next state
 ; 3. render & update, try with sample
 ; 4. load/save string representation
 ; 5. some way to compare grid, that's what's needed for GA
@@ -8,26 +8,25 @@
 ; ?. at some point, need tool to convert images; rescale, make pixelated black+white, save to string
 ; ?. allow non NxN grid
 
-(defconstant LIVE 'LIVE)
-(defconstant DEAD 'DEAD)
+(defconstant LIVE t)
+(defconstant DEAD nil)
 
-(defstruct life grid)
-
-;; Assumes square grid.
-(defun life-size (life) (car (array-dimensions (life-grid life))))
+(defstruct life grid rows cols)
 
 ;; Accepts an NxN list of lists.
 (defun life-from-lists (init)
-    (make-life :grid (make-array
-                        (list (list-length init)
-                              (list-length (car init)))
-                        :initial-contents init)))
+    (let ((rows (list-length init))
+          (cols (list-length (car init))))
+        (make-life :grid (make-array (list rows cols) :initial-contents init)
+                   :rows rows
+                   :cols cols)))
 
 (defun life-get-cell (life row col)
-    (let ((grid (life-grid life))
-          (size (life-size life)))
-        (aref grid (mod row size) (mod col size))))
+    (aref (life-grid life)
+          (mod row (life-rows life))
+          (mod col (life-cols life))))
 
+#|
 (print (let ((life (life-from-lists (list (list LIVE LIVE) (list DEAD LIVE)))))
     (mapcar (lambda (rowcol)
                 (apply (lambda (row col) (life-get-cell life row col))
@@ -41,3 +40,4 @@
             (list 2 2)
             (list 2 1)
             (list 2 0)))))
+|#
