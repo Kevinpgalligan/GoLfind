@@ -1,5 +1,3 @@
-; 1. seriously consider representation of grid & decide on final one.
-; 2. next state
 ; 3. render & update, try with sample
 ; 4. load/save string representation
 ; 5. some way to compare grid, that's what's needed for GA
@@ -26,18 +24,25 @@
           (mod row (life-rows life))
           (mod col (life-cols life))))
 
-#|
-(print (let ((life (life-from-lists (list (list LIVE LIVE) (list DEAD LIVE)))))
-    (mapcar (lambda (rowcol)
-                (apply (lambda (row col) (life-get-cell life row col))
-                       rowcol))
-        (list
-            (list (- 1) (- 1))
-            (list (- 1) 0)
-            (list 0 0)
-            (list 1 0)
-            (list 1 1)
-            (list 2 2)
-            (list 2 1)
-            (list 2 0)))))
-|#
+; TODO... implement
+(defun life-surrounding-cells (life row col) nil)
+
+(defun life-next-state (life)
+    (let ((next-grid
+           (make-array (list (life-rows life) (life-cols life))
+                       :element-type boolean ; TODO... "boolean" is undefined, for some reason?
+                       :initial-element DEAD)))
+        (loop for i from 0 to (1- (life-rows)) do
+            (loop for j from 0 to (1- (life-cols)) do
+                (let ((current (life-get-cell i j))
+                      (neighours
+                       ; TODO... filter this for LIVE cells, then count
+                       (life-surrounding-cells life i j)))
+                    (if (or (and (equalp current LIVE)
+                                 (find neighbours '(2 3)))
+                            (and (equalp current DEAD)
+                                 (= neighbours 3)))
+                        (setf (aref next-grid i j) LIVE)
+                        nil))))
+        (destructuring-bind (rows cols) (array-dimensions next-grid)
+            (make-life next-grid rows cols))))

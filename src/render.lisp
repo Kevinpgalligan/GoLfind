@@ -6,4 +6,15 @@
             (princ (if (equalp LIVE (life-get-cell life row col)) "*" " ")))
         (terpri)))
 
-(print-life (life-from-lists (list (list LIVE LIVE) (list DEAD LIVE))))
+(defun run-life (life transitions)
+    (if (= 0 transitions)
+        life
+        (progn
+            (princ "----")
+            (terpri)
+            (print-life life)
+            (sleep 1)
+            (run-life life (1- transitions)))))
+    
+(run-life (life-from-lists (list (list LIVE LIVE) (list DEAD LIVE)))
+          10)
