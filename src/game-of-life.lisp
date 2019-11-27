@@ -1,10 +1,8 @@
-; 3. render & update, try with sample
-; 4. load/save string representation
-; 5. some way to compare grids, that's what's needed for GA
-; 6. basic GA
-; 7. apply GA to the target problem
-; ?. at some point, need tool to convert images; rescale, make pixelated black+white, save to string
-; ?. allow non NxN grid
+; 0. structure as package, get quicklisp + dev env working (PCL).
+; 1. display graphics.
+; 2. load b/w image, convert to life, run it.
+; 3. should be able to save gif.
+; 4. GA.
 
 (defconstant LIVE t)
 (defconstant DEAD nil)
@@ -63,3 +61,23 @@
             (make-life :grid next-grid
                        :rows rows
                        :cols cols))))
+
+(defun compare-lives (l1 l2)
+    (let* ((diff
+            (mapcar #'equalp
+                                (2d-array-to-flat-list (life-grid l1))
+                                (2d-array-to-flat-list (life-grid l2))))
+           (diff-size (list-length diff))
+           (matching (list-length (remove nil diff)))
+           (non-matching (- diff-size matching)))
+        (values matching non-matching)))
+
+(defun 2d-array-to-flat-list (array)
+    (flatten
+        (loop for i below (array-dimension array 0) collect
+            (loop for j below (array-dimension array 1) collect
+                (aref array i j)))))
+
+(defun flatten (xs)
+    (cond ((null xs) nil)
+          (t (append (car xs) (flatten (cdr xs))))))
