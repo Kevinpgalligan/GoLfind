@@ -6,7 +6,7 @@
 (defsystem evolving-faces
   :license "MIT"
   :author "Kevin Galligan"
-  :depends-on (:sketch)
+  :depends-on (:sketch :alexandria)
   :pathname "src"
   :serial t
   :components ((:file "package")
