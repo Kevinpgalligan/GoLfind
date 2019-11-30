@@ -1,9 +1,10 @@
-; 0. think through what the final product will be like.
-;    a) load image, b) convert to life, c) pass to "evolve population" repeatedly, tracking fitness levels (graph of fitness at the end). There should be a "result" returned from each round, including current population, current best, fitness history. Animation could show generation num at the top, best individuals running below, and slowly evolving graph of top fitness. Mayhaps. Nah, on second thoughts: first, just run for N generations and show the result. Keep reference to the result so can run for more if necessary. After obtaining desired results, display the best individual, save gif. Create graph of fitness over time. Possibly run again and take samples every k generations, these can be animated so that progress can be shown. Aaaaaand that's about it. Open question: how to go from Sketch to GIF. How GA should work: accept result arg, if provided then use it to set population for this generation; otherwise, initialize a random one using optional pop size arg (and evaluate fitness of individuals, sort). Rank according to fitness, return result (single fitness datapoint, individuals, best). That's the case where no previous result was passed in. If previous result was passed in: evolve new population, evaluate, sort, return result (old fitness datapoints + new one, individuals, best). This seems flexible, can run evolution for a few rounds and then check out the results, graph things. Then continue it. The genetic operations can be: elitism (30%), selection (20%), mutation (30%), cross-over (20%). Will need to play around with the percentages, maybe do some research on that. What did they use in the paper?
-; 1. display graphics (library: Sketch, download through Quicklisp).
-; 2. load b/w image, convert to life, run it.
-; 3. should be able to save gif.
-; 4. GA.
+; 1. finish GA code.
+; 2. load b/w image, convert to life.
+; 3. display graphics.
+; 4. save to gif.
+; Final workflow: load image, convert to life, pass to 'evolve' repeatedly. See how the best individual
+; looks every few generations, save gifs of individuals. When happy with result, save gif
+; of the best and a graph of fitness over time.
 
 (in-package :evolving-faces)
 
