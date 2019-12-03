@@ -4,10 +4,6 @@
 (defstruct result best population fitness-datapoints)
 (defstruct fitness-datapoint p0 p50 p100)
 
-;; todo repetitive loop code over grids
-;; todo not converting lives to individuals in evolve-population
-;; todo I think the loop code in mutate & crossover is broken
-
 (defun evolve (target &key result (pop-size 100) (states-to-eval 100))
   (if (null result)
       (pop-to-result (random-population target pop-size states-to-eval) (list))
@@ -30,13 +26,21 @@
       (last population elites)
       (loop repeat crossovers
             collect
-            (crossover (select-random population pop-size) (select-random population pop-size)))
+            (let ((crossover-life
+                    (apply #'crossover
+                           (mapcar #'individual-life
+                                   (list (select-random population pop-size)
+                                         (select-random population pop-size))))))
+              (make-individual :life crossover-life
+                               :fitness (evaluate-fitness crossover-life target states-to-eval))))
       (loop repeat mutants
             collect
-            (mutate (select-random population pop-size)))))))
+            (let ((mutated-life (mutate (individual-life (select-random population pop-size)))))
+              (make-individual :life mutated-life
+                               :fitness (evaluate-fitness mutated-life target states-to-eval))))))))
 
 (defun select-random (population pop-size)
-  ;; Actually do a weighted choice.
+  ;; Rank-based probability.
   (let* ((proportion-sum (/ (* pop-size (1+ pop-size)) 2))
          (choice (random proportion-sum)))
     (loop for n from 1 upto pop-size
@@ -45,11 +49,9 @@
           do (when (> sum choice)
                (return individual)))))
 
-(defun crossover (ind1 ind2)
-  (let* ((l1 (individual-life ind1))
-         (l2 (individual-life ind2))
-         (rows (life-rows l1))
-         (cols (life-cols l2))
+(defun crossover (l1 l2)
+  (let* ((rows (life-rows l1))
+         (cols (life-cols l1))
          (new-grid (alexandria:copy-array (life-grid l1))))
     (loop for i from 0 upto (1- rows) do
           (loop for j from 0 upto (1- cols) do
@@ -57,22 +59,21 @@
                            (= (random 2) 0))
                   ;; If the two lives are not the same in this cell, make a random
                   ;; choice between them.
-                  (setf (aref new-grid i j) (life-get-cell l2 i j))))
-          (finally (return (make-life new-grid rows cols))))))
+                  (setf (aref new-grid i j) (life-get-cell l2 i j)))))
+    (make-life :grid new-grid :rows rows :cols cols)))
 
-(defun mutate (individual)
-  (let* ((life (individual-life individual))
-         (rows (life-rows life))
+(defun mutate (life)
+  (let* ((rows (life-rows life))
          (cols (life-cols life))
          (new-grid (alexandria:copy-array (life-grid life))))
     (loop for i from 0 upto (1- rows) do
           (loop for j from 0 upto (1- cols) do
-                (when (= 0 (random 2))
+                (when (= 0 (random 4)) ; 25% mutation rate
                   (setf (aref new-grid i j)
                         (if (equalp DEAD (life-get-cell life i j))
                             LIVE
-                            DEAD))))
-          (finally (return (make-life new-grid rows cols))))))
+                            DEAD)))))
+    (make-life :grid new-grid :rows rows :cols cols)))
 
 (defun get-fitness-datapoint (population)
   (make-fitness-datapoint
@@ -93,7 +94,7 @@
 
 (defun order-individuals (individuals)
   ;; Sort from highest fitness score (worst fitness) to lowest.
-  (sort individuals #'> :key individual-fitness))
+  (sort individuals #'> :key #'individual-fitness))
 
 (defun random-individual (target states-to-eval)
   (let ((life (random-life target)))
@@ -101,11 +102,12 @@
                      :fitness (evaluate-fitness life target states-to-eval))))
 
 (defun random-life (target)
-  (loop for _ from 1 upto (life-rows target) collect
-        (loop for _ from 1 upto (life-cols target) collect
-              (if (zerop (random 2))
-                  DEAD
-                  LIVE))))
+  (life-from-lists
+   (loop for _ from 1 upto (life-rows target) collect
+         (loop for _ from 1 upto (life-cols target) collect
+               (if (zerop (random 2))
+                   DEAD
+                   LIVE)))))
 
 (defun evaluate-fitness (life target states-to-eval)
   (loop for state from 1 upto states-to-eval

@@ -1,10 +1,14 @@
-; 1. finish GA code.
-; 2. load b/w image, convert to life.
-; 3. display graphics.
-; 4. save to gif.
-; Final workflow: load image, convert to life, pass to 'evolve' repeatedly. See how the best individual
-; looks every few generations, save gifs of individuals. When happy with result, save gif
-; of the best and a graph of fitness over time.
+; 1. load b/w image, convert to life.
+; 2. display life (step by step; play N states; reset).
+; 3. fitness plotting.
+; 4. use these tools to debug the smiley face.
+;    suspicions: converging to local max, which is just empty cells everywhere.
+;    need to think about how to change fitness fn to get away from that.
+;    play with mutation rate, amount of mutation in population, initial pop size,
+;    proportion of elitism vs others, etc.
+; 5. now try on big face, debug / tweak until it works.
+; 6. implement save to gif.
+; 7. start write-up.
 
 (in-package :evolving-faces)
 
@@ -25,7 +29,7 @@
         (mod row (life-rows life))
         (mod col (life-cols life))))
 
-(defconstant NEIGHBOUR-OFFSETS
+(alexandria:define-constant +neighbour-offsets+
   (list (list (- 1) (- 1))
         (list (- 1) 0)
         (list (- 1) 1)
@@ -63,7 +67,7 @@
              (lambda (coords)
                (destructuring-bind (row col) coords
                  (life-get-cell life row col)))
-             (loop for offsets in NEIGHBOUR-OFFSETS collect
+             (loop for offsets in +neighbour-offsets+ collect
                    (mapcar #'+ offsets coords))))))
 
 (defun compare-lives (l1 l2)
