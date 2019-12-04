@@ -97,17 +97,9 @@
   (sort individuals #'> :key #'individual-fitness))
 
 (defun random-individual (target states-to-eval)
-  (let ((life (random-life target)))
+  (let ((life (random-life (life-rows target) (life-cols target))))
     (make-individual :life life
                      :fitness (evaluate-fitness life target states-to-eval))))
-
-(defun random-life (target)
-  (life-from-lists
-   (loop for _ from 1 upto (life-rows target) collect
-         (loop for _ from 1 upto (life-cols target) collect
-               (if (zerop (random 2))
-                   DEAD
-                   LIVE)))))
 
 (defun evaluate-fitness (life target states-to-eval)
   (loop for state from 1 upto states-to-eval

@@ -1,15 +1,3 @@
-; 1. load b/w image, convert to life.
-; 2. display life (step by step; play N states; reset).
-; 3. fitness plotting.
-; 4. use these tools to debug the smiley face.
-;    suspicions: converging to local max, which is just empty cells everywhere.
-;    need to think about how to change fitness fn to get away from that.
-;    play with mutation rate, amount of mutation in population, initial pop size,
-;    proportion of elitism vs others, etc.
-; 5. now try on big face, debug / tweak until it works.
-; 6. implement save to gif.
-; 7. start write-up.
-
 (in-package :evolving-faces)
 
 (defconstant LIVE t)
@@ -89,3 +77,11 @@
 (defun flatten (xs)
   (cond ((null xs) nil)
         (t (append (car xs) (flatten (cdr xs))))))
+
+(defun random-life (rows cols)
+  (life-from-lists
+   (loop for _ from 1 upto rows collect
+         (loop for _ from 1 upto cols collect
+               (if (zerop (random 2))
+                   DEAD
+                   LIVE)))))
