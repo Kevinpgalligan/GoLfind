@@ -4,7 +4,7 @@ Using evolutionary algorithms to evolve Game of Life states that eventually turn
 \<Insert demonstration gif here>
 
 #### TO-DO
-1. load b/w image, convert to life.
+1. load b/w image, convert to life (initial version looks wrong).
 2. display life (step by step; play N states; reset; save to image; save to gif).
 3. fitness plotting.
 4. use these tools to debug the smiley face.

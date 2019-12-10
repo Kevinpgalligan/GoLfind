@@ -1,4 +1,4 @@
-(in-package :evolving-faces)
+(in-package :mona-lisa-gol)
 
 (defconstant LIVE t)
 (defconstant DEAD nil)
@@ -85,3 +85,18 @@
                (if (zerop (random 2))
                    DEAD
                    LIVE)))))
+
+(defun load-png-as-life (path)
+  (life-from-lists
+   (let* ((pixels (png-read:image-data (png-read:read-png-file path)))
+          (rows (array-dimension pixels 0))
+          (cols (array-dimension pixels 1)))
+     (loop for row from 0 upto (1- rows) collect
+           (loop for col from 0 upto (1- cols) collect
+                 (let ((max-rgb
+                         (apply #'max (mapcar #'(lambda (channel)
+                                                  (aref pixels row col channel))
+                                              (list 0 1 2)))))
+                   (if (< max-rgb 255)
+                       LIVE ; black pixels are live cells
+                       DEAD)))))))

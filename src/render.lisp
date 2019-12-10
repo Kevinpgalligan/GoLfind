@@ -1,4 +1,4 @@
-(in-package evolving-faces)
+(in-package mona-lisa-gol)
 
 (defsketch run-life ()
   (background +white+))

@@ -1,4 +1,4 @@
-(in-package evolving-faces)
+(in-package mona-lisa-gol)
 
 (defstruct individual life fitness)
 (defstruct result best population fitness-datapoints)

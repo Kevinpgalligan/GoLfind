@@ -1,2 +1,2 @@
-(defpackage :evolving-faces
+(defpackage :mona-lisa-gol
   (:use :cl :sketch))
