@@ -89,14 +89,10 @@
 (defun load-png-as-life (path)
   (life-from-lists
    (let* ((pixels (png-read:image-data (png-read:read-png-file path)))
-          (rows (array-dimension pixels 0))
-          (cols (array-dimension pixels 1)))
+          (cols (array-dimension pixels 0))
+          (rows (array-dimension pixels 1)))
      (loop for row from 0 upto (1- rows) collect
            (loop for col from 0 upto (1- cols) collect
-                 (let ((max-rgb
-                         (apply #'max (mapcar #'(lambda (channel)
-                                                  (aref pixels row col channel))
-                                              (list 0 1 2)))))
-                   (if (< max-rgb 255)
-                       LIVE ; black pixels are live cells
-                       DEAD)))))))
+                 ;; Don't bother to check the other channels, this
+                 ;; is only supposed to work for black & white images.
+                 (if (< (aref pixels col row 0) 255) LIVE DEAD))))))
