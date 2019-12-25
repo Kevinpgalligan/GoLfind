@@ -17,7 +17,7 @@
         (mod row (life-rows life))
         (mod col (life-cols life))))
 
-(alexandria:define-constant +neighbour-offsets+
+(defparameter +neighbour-offsets+
   (list (list (- 1) (- 1))
         (list (- 1) 0)
         (list (- 1) 1)
@@ -96,3 +96,14 @@
                  ;; Don't bother to check the other channels, this
                  ;; is only supposed to work for black & white images.
                  (if (< (aref pixels col row 0) 255) LIVE DEAD))))))
+
+(defparameter +smiley+
+  (life-from-lists
+   (list
+    (list DEAD LIVE LIVE LIVE LIVE LIVE LIVE LIVE DEAD)
+    (list LIVE DEAD DEAD DEAD DEAD DEAD DEAD DEAD LIVE)
+    (list LIVE DEAD DEAD LIVE DEAD LIVE DEAD DEAD LIVE)
+    (list LIVE DEAD LIVE DEAD DEAD DEAD LIVE DEAD LIVE)
+    (list LIVE DEAD DEAD LIVE LIVE LIVE DEAD DEAD LIVE)
+    (list LIVE DEAD DEAD DEAD DEAD DEAD DEAD DEAD LIVE)
+    (list DEAD LIVE LIVE LIVE LIVE LIVE LIVE LIVE DEAD))))

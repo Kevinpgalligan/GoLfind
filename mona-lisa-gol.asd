@@ -6,10 +6,11 @@
 (defsystem mona-lisa-gol
   :license "MIT"
   :author "Kevin Galligan"
-  :depends-on (:sketch :alexandria :png-read)
+  :depends-on (:sketch :alexandria :png-read :skippy)
   :pathname "src"
   :serial t
   :components ((:file "package")
                (:file "game-of-life")
-               (:file "render")
+               (:file "gif")
+               (:file "animate")
                (:file "genetic")))

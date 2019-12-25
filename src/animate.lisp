@@ -1,12 +1,15 @@
 (in-package mona-lisa-gol)
 
+(require 'sketch)
+(use-package 'sketch)
+
 (defsketch run-life
     ((initial-life (random-life 50 100))
-     ;; must override initial-life when passing life
+     ;; user must override initial-life when passing life
      ;; to the sketch.
-     ;; directly setting the default life to random
-     ;; doesn't allow it to be overridden, for some
-     ;; reason.
+     ;; directly setting the default value of 'life'
+     ;; to random prevents it from being overridden,
+     ;; for some reason.
      (life initial-life)
      (pixels-per-cell 50)
      (width (* (life-cols life) pixels-per-cell))
@@ -27,13 +30,3 @@
               pixels-per-cell
               pixels-per-cell)))))
 
-(defparameter +smiley+
-  (life-from-lists
-   (list
-    (list DEAD LIVE LIVE LIVE LIVE LIVE DEAD)
-    (list LIVE DEAD DEAD DEAD DEAD DEAD LIVE)
-    (list LIVE DEAD LIVE DEAD LIVE DEAD LIVE)
-    (list LIVE DEAD DEAD DEAD DEAD DEAD LIVE)
-    (list LIVE DEAD LIVE LIVE LIVE DEAD LIVE)
-    (list LIVE DEAD DEAD DEAD DEAD DEAD LIVE)
-    (list DEAD LIVE LIVE LIVE LIVE LIVE DEAD))))
