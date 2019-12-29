@@ -1,5 +1,6 @@
 (in-package mona-lisa-gol)
 
+(require 'cl-sat)
 (require 'cl-sat.minisat)
 (import '(cl-sat:solve
           cl-sat:var))
@@ -13,9 +14,8 @@
             satisfiable)))
 |#
 
-;; todo fix the case where there's a single cell
-;; todo run again on +smiley+, see if number of variables is correct
-;;      and manually check that a generated SAT equation is correct.
+;; todo figure out why number of variables is incorrect in SAT for +smiley+
+;; todo manually check that a (more complex) generated SAT equation is correct.
 ;; todo implement conversion back to life
 (defun life->sat (life)
   (let ((cols (life-cols life)))
@@ -39,21 +39,21 @@
   ;; or was DEAD and had 2 LIVE neighbours
   ;; if DEAD...
   ;; the negation of the above.
-    (let ((clause `(or (and ,cell
+  (let ((clause `(or (and ,cell
                           (or ,@(clauses-with-n-live 2 neighbours)
                               ,@(clauses-with-n-live 3 neighbours)))
                      (and ,(bool-not cell)
                           (or ,@(clauses-with-n-live 2 neighbours))))))
-      (if (equalp LIVE cell-state)
-          clause
-          `(not ,clause))))
+    (if (equalp LIVE cell-state)
+        clause
+        `(not ,clause))))
 
 (defun bool-not (symbol)
   `(not ,symbol))
 
 (defun clauses-with-n-live (n neighbours)
   "Generates all clauses where n of the variables denote live cells."
-  (let* ((num-vars (length neighbours)))
+  (let ((num-vars (length neighbours)))
     (if (> n num-vars)
         ;; Impossible to satisfy, just return an impossible clause.
         (list `(and a !a))

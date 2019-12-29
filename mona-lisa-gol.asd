@@ -6,7 +6,7 @@
 (defsystem mona-lisa-gol
   :license "MIT"
   :author "Kevin Galligan"
-  :depends-on (:sketch :alexandria :png-read :skippy)
+  :depends-on (:sketch :alexandria :png-read :skippy :cl-sat.minisat)
   :pathname "src"
   :serial t
   :components ((:file "package")
