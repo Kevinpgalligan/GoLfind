@@ -11,6 +11,7 @@
   :serial t
   :components ((:file "package")
                (:file "game-of-life")
+               (:file "backsearch")
                (:file "gif")
                (:file "animate")
                (:file "genetic")))

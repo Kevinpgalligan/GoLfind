@@ -47,16 +47,17 @@
                  :rows rows
                  :cols cols))))
 
-;; Buggy for small grids, counts self as a neighbour.
 (defun life-live-neighbours (life row col)
-  (let ((coords (list row col)))
-    (remove DEAD
-            (mapcar
-             (lambda (coords)
-               (destructuring-bind (row col) coords
-                 (life-get-cell life row col)))
-             (loop for offsets in +neighbour-offsets+ collect
-                   (mapcar #'+ offsets coords))))))
+  (remove DEAD
+          (mapcar (lambda (coords) (apply #'life-get-cell life coords))
+                  (life-neighbour-coords life row col))))
+
+(defun life-neighbour-coords (life row col)
+  (remove-duplicates
+   (loop for offset in +neighbour-offsets+ collect
+         (list (mod (+ row (car offset)) (life-rows life))
+               (mod (+ col (cadr offset)) (life-cols life))))
+   :test #'equalp))
 
 (defun compare-lives (l1 l2)
   (let* ((diff

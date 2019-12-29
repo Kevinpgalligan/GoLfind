@@ -55,9 +55,13 @@
                            live-color)))
             (dotimes (row-pixel pixels-per-cell)
               (dotimes (col-pixel pixels-per-cell)
+                ;; Not particularly proud of this code, it's difficult to
+                ;; understand. It's just messy going from 2d indexing to
+                ;; 1d indexing. And having multiple pixels per cell further
+                ;; messes things up. Anyway, it seems to work.
                 (setf (aref data (+ (* row pixels-per-row)
                                     (* row-pixel pixels-per-line)
                                     (* col pixels-per-cell)
                                     col-pixel))
                       color))))))
-      data))))
+      data)))
