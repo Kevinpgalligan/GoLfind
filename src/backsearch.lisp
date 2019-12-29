@@ -1,7 +1,8 @@
 (in-package mona-lisa-gol)
 
-(require 'cl-sat)
-(import '(cl-sat:solve))
+(require 'cl-sat.minisat)
+(import '(cl-sat:solve
+          cl-sat:var))
 
 (defun find-life-parent-state (life)
   (multiple-value-bind (solution satisfiable)
@@ -12,20 +13,24 @@
             satisfiable)))
 |#
 
+;; todo fix the case where there's a single cell
+;; todo run again on +smiley+, see if number of variables is correct
+;;      and manually check that a generated SAT equation is correct.
+;; todo implement conversion back to life
 (defun life->sat (life)
   (let ((cols (life-cols life)))
     `(and ,@(loop for coords in (alexandria:map-product #'list
                                                         (alexandria:iota (life-rows life))
                                                         (alexandria:iota cols))
                   collect (multiple-value-bind (row col) (apply #'values coords)
-                            (let ((cell (coords->symbol cols row col))
+                            (let ((cell (coords->var cols row col))
                                   (neighbours
-                                    (mapcar (lambda (coords) (apply #'coords->symbol cols coords))
+                                    (mapcar (lambda (coords) (apply #'coords->var cols coords))
                                             (life-neighbour-coords life row col))))
                               (previous-cell-clause cell neighbours (life-get-cell life row col))))))))
 
-(defun coords->symbol (cols row col)
-  (make-symbol (write-to-string (+ (* cols row) col))))
+(defun coords->var (cols row col)
+  (var (+ (* cols row) col)))
 
 (defun previous-cell-clause (cell neighbours cell-state)
   "Returns clause with possible previous states of cell + its neighbours."
@@ -44,7 +49,7 @@
           `(not ,clause))))
 
 (defun bool-not (symbol)
-  (make-symbol (concatenate 'string "!" (string symbol))))
+  `(not ,symbol))
 
 (defun clauses-with-n-live (n neighbours)
   "Generates all clauses where n of the variables denote live cells."
