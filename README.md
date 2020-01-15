@@ -13,7 +13,7 @@ Possible next steps:
 
 Given the above blabbering, here's the new to-do:
 
-1. Benchmark backsearch, find maximum number of cells that can be backsearched in a reasonable amount of time.
+1. [DONE: see graph, 400 cells takes quite a while; also, I'm pretty sure that ALL of the random life instances used in the test turned out to be Gardens of Eden, which is not promising] Benchmark backsearch, find maximum number of cells that can be backsearched in a reasonable amount of time.
 2. Brainstorm images to use, gather them (and pixelate so that they're as close to the max size as possible).
 3. Run the backsearch on collected images.
 4. Start write-up.
