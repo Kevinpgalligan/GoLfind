@@ -5,6 +5,17 @@
 (import '(cl-sat:solve
           cl-sat:var))
 
+(defun life-backsearch (life n)
+  (let ((previous-states-found 0))
+    (loop for i from 1 upto n do
+          (multiple-value-bind (parent exists) (find-life-parent-state life)
+            (if exists
+                (progn
+                  (setf life parent)
+                  (incf previous-states-found))
+                (return))))
+    (values life previous-states-found)))
+
 (defun find-life-parent-state (life)
   (multiple-value-bind (solution satisfiable)
       (cl-sat:solve (life->sat life) :minisat)
