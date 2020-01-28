@@ -1,12 +1,14 @@
 ## Mona Lisa GoL
-Finding Game of Life states that eventually turn into a picture, such as the Mona Lisa. Write-up: https://kevingal.com/blog/mona-lisa-gol.html
+Finding Game of Life states that eventually turn into a picture, such as the Mona Lisa.
+
+Write-up: https://kevingal.com/blog/mona-lisa-gol.html
 
 ![demonstration of Life transforming into Mona Lisa's face](https://github.com/Kevinpgalligan/MonaLisaGoL/blob/master/mona.gif)
 
 Comes with code for simulating Life, doing backsearch (i.e. finding the parent state of a Life state) and creating GIFs / animations of the Life simulation. Even if you haven't used Common Lisp before, it should be straightforward to follow the examples (below) and play around with it.
 
-### Setup
-##### Step 1: prerequisites
+## Setup
+#### Step 1: prerequisites
 You'll need:
 * An implementation of Common Lisp.
 * Quicklisp (the Common Lisp package manager).
@@ -30,11 +32,17 @@ If anything doesn't work or you're confused by these instructions, please let me
 #### Usage examples
 From your REPL of choice, load the "mona-lisa-gol" package (`M-x slime-load-system` in Portacle / Emacs / Slime; this means holding down the command key (usually Alt) and pressing x, then typing "slime-load-system", then pressing enter, then entering the name of the package).
 
-Then...
+Now, in the REPL...
 
 ```common-lisp
 CL-USER> (in-package mona-lisa-gol)
 #<PACKAGE "MONA-LISA-GOL">
+MONA-LISA-GOL> (defparameter custom-life
+    (life-from-lists (list (list LIVE DEAD)
+                     (list DEAD LIVE))))
+CUSTOM-LIFE
+MONA-LISA-GOL> custom-life
+#S(LIFE :GRID #2A((T NIL) (NIL T)) :ROWS 2 :COLS 2)
 MONA-LISA-GOL> (defparameter some-life (random-life 4 4))
 SOME-LIFE
 MONA-LISA-GOL> some-life
@@ -70,17 +78,6 @@ SATISFIABLE
 T
 MONA-LISA-GOL> ; the parent we found is different to some-life, next-life has multiple parents
 ; No value
-MONA-LISA-GOL> some-life
-#S(LIFE
-   :GRID #2A((T T NIL NIL) (NIL T NIL T) (NIL T T NIL) (NIL T T T))
-   :ROWS 4
-   :COLS 4)
-MONA-LISA-GOL> (defparameter custom-life
-    (life-from-lists (list (list LIVE DEAD)
-                     (list DEAD LIVE))))
-CUSTOM-LIFE
-MONA-LISA-GOL> custom-life
-#S(LIFE :GRID #2A((T NIL) (NIL T)) :ROWS 2 :COLS 2)
 MONA-LISA-GOL> ; run an animation
 MONA-LISA-GOL> (run-life some-life :pixels-per-cell 50 :frames-per-state 20)
 #<LIFE-ANIMATE {10036EE1D3}>
