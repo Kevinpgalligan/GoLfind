@@ -1,19 +1,99 @@
-## Mona Lisa Game of Life
-Searching for Game of Life states that eventually turn into a given picture, such as the Mona Lisa.
+## Mona Lisa GoL
+Finding Game of Life states that eventually turn into a picture, such as the Mona Lisa. Write-up: https://kevingal.com/blog/mona-lisa-gol.html
 
-\<Insert demonstration gif here>
+![demonstration of Life transforming into Mona Lisa's face](https://github.com/Kevinpgalligan/MonaLisaGoL/blob/master/mona.gif)
 
-#### TO-DO
-It seems that the backsearch ain't gonna fly on large instances of Life. Two issues: takes fucking forever, and heap fills up.
+Comes with code for simulating Life, doing backsearch (i.e. finding the parent state of a Life state) and creating GIFs / animations of the Life simulation. Even if you haven't used Common Lisp before, it should be straightforward to follow the examples (below) and play around with it.
 
-Possible next steps:
+### Setup
+##### Step 1: prerequisites
+You'll need:
+* An implementation of Common Lisp.
+* Quicklisp (the Common Lisp package manager).
 
-1. Optimise the backsearch by using different SAT solver (glucose) and/or generating smaller, easier-to-solve SAT equations (see: The Art of Computer Programming, Volume 4, Fascicle 6).
-2. Find smaller Life instances that look good and run it on those instead. Candidates: my face, Mona Lisa, draw a bike, the moon, Steve Buscemi, etc. This is my preference, since I have already sunk a lot of time into this. Just note that even 50x20 takes forever to run. That's 1000 cells. 18x24=432. Need to run some benchmarks to see how it takes for a given number of cells. Anyway, it should still look cool at that size, as long as the original & pixelated versions are displayed along-side it for comparison.
+If you don't have these, the fastest way to get started is to install [Portacle](https://portacle.github.io/), which comes with everything you need.
 
-Given the above blabbering, here's the new to-do:
+##### Step 2: download
+Clone this repository into your Quicklisp local-projects folder. For Portacle users, this should be `~/portacle/all/quicklisp/local-projects/`.
 
-1. [DONE: see graph, 400 cells takes quite a while; also, I'm pretty sure that ALL of the random life instances used in the test turned out to be Gardens of Eden, which is not promising] Benchmark backsearch, find maximum number of cells that can be backsearched in a reasonable amount of time.
-2. Brainstorm images to use, gather them (and pixelate so that they're as close to the max size as possible).
-3. Run the backsearch on collected images.
-4. Start write-up.
+```
+$ cd ~/portacle/all/quicklisp/local-projects/
+$ git clone https://github.com/Kevinpgalligan/MonaLisaGoL.git
+```
+
+##### Step 3 (for Portacle users): cl-sat fix
+For users of Portacle, there is an unfortunate bug in the Quicklisp-provided version of cl-sat (as of early 2020) that prevents it from working within Portacle. I'll push a fix for this to the cl-sat repository shortly, at which point you will have to clone [cl-sat](https://github.com/guicho271828/cl-sat) and [cl-sat.minisat](https://github.com/guicho271828/cl-sat.minisat) into your Quicklisp local-projects folder.
+
+##### Step 4: pray
+If anything doesn't work or you're confused by these instructions, please let me know and I'll try to help.
+
+#### Usage examples
+From your REPL of choice, load the "mona-lisa-gol" package (`M-x slime-load-system` in Portacle / Emacs / Slime; this means holding down the command key (usually Alt) and pressing x, then typing "slime-load-system", then pressing enter, then entering the name of the package).
+
+Then...
+
+```common-lisp
+CL-USER> (in-package mona-lisa-gol)
+#<PACKAGE "MONA-LISA-GOL">
+MONA-LISA-GOL> (defparameter some-life (random-life 4 4))
+SOME-LIFE
+MONA-LISA-GOL> some-life
+#S(LIFE
+   :GRID #2A((T T NIL NIL) (NIL T NIL T) (NIL T T NIL) (NIL T T T))
+   :ROWS 4
+   :COLS 4)
+MONA-LISA-GOL> (life-get-cell some-life 0 1)
+T
+MONA-LISA-GOL> (life-get-cell some-life 0 2)
+NIL
+MONA-LISA-GOL> (defparameter next-life (life-next-state some-life))
+NEXT-LIFE
+MONA-LISA-GOL> next-life
+#S(LIFE
+   :GRID #2A((NIL NIL NIL NIL)
+             (NIL NIL NIL T)
+             (NIL NIL NIL NIL)
+             (NIL NIL NIL T))
+   :ROWS 4
+   :COLS 4)
+MONA-LISA-GOL> (find-life-parent-state next-life)
+[...trimmed MiniSAT output...]
+Memory used           : 7.43 MB
+CPU time              : 0.024131 s
+
+SATISFIABLE
+[...trimmed MiniSAT output...]
+#S(LIFE
+   :GRID #2A((NIL NIL T NIL) (NIL NIL NIL NIL) (T NIL NIL T) (NIL NIL NIL NIL))
+   :ROWS 4
+   :COLS 4)
+T
+MONA-LISA-GOL> ; the parent we found is different to some-life, next-life has multiple parents
+; No value
+MONA-LISA-GOL> some-life
+#S(LIFE
+   :GRID #2A((T T NIL NIL) (NIL T NIL T) (NIL T T NIL) (NIL T T T))
+   :ROWS 4
+   :COLS 4)
+MONA-LISA-GOL> (defparameter custom-life
+    (life-from-lists (list (list LIVE DEAD)
+                     (list DEAD LIVE))))
+CUSTOM-LIFE
+MONA-LISA-GOL> custom-life
+#S(LIFE :GRID #2A((T NIL) (NIL T)) :ROWS 2 :COLS 2)
+MONA-LISA-GOL> ; run an animation
+MONA-LISA-GOL> (run-life some-life :pixels-per-cell 50 :frames-per-state 20)
+#<LIFE-ANIMATE {10036EE1D3}>
+MONA-LISA-GOL> ; load a black & white image as a Life state
+MONA-LISA-GOL> (defparameter pic-as-life (load-png-as-life "/home/kevin/Imágenes/gol.png"))
+PIC-AS-LIFE
+MONA-LISA-GOL> pic-as-life
+#S(LIFE
+   :GRID #2A((NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL NIL
+              [...insert big-ass array here...]
+   :ROWS 348
+   :COLS 348)
+MONA-LISA-GOL> ; save it as a gif
+MONA-LISA-GOL> (life-to-gif pic-as-life "~/mygif.gif" :num-states 5 :pixels-per-cell 3)
+#P"/home/kevin/mygif.gif"
+```
