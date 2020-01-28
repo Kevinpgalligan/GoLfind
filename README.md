@@ -29,7 +29,7 @@ For users of Portacle, there is an unfortunate bug in the Quicklisp-provided ver
 ##### Step 4: pray
 If anything doesn't work or you're confused by these instructions, please let me know and I'll try to help.
 
-#### Usage examples
+## Usage examples
 From your REPL of choice, load the "mona-lisa-gol" package (`M-x slime-load-system` in Portacle / Emacs / Slime; this means holding down the command key (usually Alt) and pressing x, then typing "slime-load-system", then pressing enter, then entering the name of the package).
 
 Now, in the REPL...
