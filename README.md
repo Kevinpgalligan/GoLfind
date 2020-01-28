@@ -30,7 +30,7 @@ For users of Portacle, there is an unfortunate bug in the Quicklisp-provided ver
 If anything doesn't work or you're confused by these instructions, please let me know and I'll try to help.
 
 ## Usage examples
-From your REPL of choice, load the "mona-lisa-gol" package (`M-x slime-load-system` in Portacle / Emacs / Slime; this means holding down the command key (usually Alt) and pressing x, then typing "slime-load-system", then pressing enter, then entering the name of the package).
+From your Lisp environment of choice, load the "mona-lisa-gol" package. This will be `M-x slime-load-system` in Portacle / Emacs / Slime, so hold down the command key (usually Alt) and press x, then type "slime-load-system", then press enter, then enter the name of the package.
 
 Now, in the REPL...
 
