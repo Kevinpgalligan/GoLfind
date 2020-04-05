@@ -24,7 +24,7 @@ $ git clone https://github.com/Kevinpgalligan/MonaLisaGoL.git
 ```
 
 ##### Step 3 (for Portacle users): cl-sat fix
-For users of Portacle, there is an unfortunate bug in the Quicklisp-provided version of cl-sat (as of early 2020) that prevents it from working within Portacle. I've pushed push a fix for this to the cl-sat repository (see [this pull request](https://github.com/cl-model-languages/cl-sat/pull/5)). You will have to clone [cl-sat](https://github.com/guicho271828/cl-sat) and [cl-sat.minisat](https://github.com/guicho271828/cl-sat.minisat) into your Quicklisp local-projects folder in order to use this fix.
+For users of Portacle, there is an unfortunate bug in the Quicklisp-provided version of cl-sat (as of early 2020) that prevents it from working within Portacle. I've pushed a fix for this to the cl-sat repository (see [this pull request](https://github.com/cl-model-languages/cl-sat/pull/5)). You will have to clone [cl-sat](https://github.com/guicho271828/cl-sat) and [cl-sat.minisat](https://github.com/guicho271828/cl-sat.minisat) into your Quicklisp local-projects folder in order to use this fix.
 
 ##### Step 4: pray
 If anything doesn't work or you're confused by these instructions, please let me know and I'll try to help.

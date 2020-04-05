@@ -59,16 +59,6 @@
                (mod (+ col (cadr offset)) (life-cols life))))
    :test #'equalp))
 
-(defun compare-lives (l1 l2)
-  (let* ((diff
-           (mapcar #'equalp
-                   (2d-array-to-flat-list (life-grid l1))
-                   (2d-array-to-flat-list (life-grid l2))))
-         (diff-size (list-length diff))
-         (matching (list-length (remove nil diff)))
-         (non-matching (- diff-size matching)))
-    (values matching non-matching)))
-
 (defun 2d-array-to-flat-list (array)
   (flatten
    (loop for i below (array-dimension array 0) collect
