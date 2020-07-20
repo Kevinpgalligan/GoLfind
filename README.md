@@ -23,16 +23,16 @@ $ cd ~/portacle/all/quicklisp/local-projects/
 $ git clone https://github.com/Kevinpgalligan/MonaLisaGoL.git
 ```
 
-##### Step 3 (for Portacle users): cl-sat fix
-For users of Portacle, there is an unfortunate bug in the Quicklisp-provided version of cl-sat (as of early 2020) that prevents it from working within Portacle. I've pushed a fix for this to the cl-sat repository (see [this pull request](https://github.com/cl-model-languages/cl-sat/pull/5)). You will have to clone [cl-sat](https://github.com/guicho271828/cl-sat) and [cl-sat.minisat](https://github.com/guicho271828/cl-sat.minisat) into your Quicklisp local-projects folder in order to use this fix.
+##### Step 3: manual sketch installation
+The [sketch](https://github.com/vydd/sketch) library requires a manual installation step, unfortunately. You'll need to install some SDL2-related dependencies, as described in its README. Shortcut for Debian users: `sudo apt-get install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev`.
 
-##### Step 4: pray
+##### Step 4: load
+From within your REPL, run `(ql:quickload 'mona-lisa-gol)`. You should now be able to play with the examples below.
+
 If anything doesn't work or you're confused by these instructions, please let me know and I'll try to help.
 
 ## Usage examples
-From your Lisp environment of choice, load the "mona-lisa-gol" package. This will be `M-x slime-load-system` in Portacle / Emacs / Slime, so hold down the command key (usually Alt) and press x, then type "slime-load-system", then press enter, then enter the name of the package.
-
-Now, in the REPL...
+From the REPL...
 
 ```common-lisp
 CL-USER> (in-package mona-lisa-gol)
