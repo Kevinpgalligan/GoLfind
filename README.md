@@ -7,6 +7,8 @@ Write-up: https://kevingal.com/blog/mona-lisa-gol.html
 
 Comes with code for simulating Life, doing backsearch (i.e. finding the parent state of a Life state) and creating GIFs / animations of the Life simulation. Even if you haven't used Common Lisp before, it should be straightforward to follow the examples (below) and play around with it.
 
+I created [a tool](https://kevingal.com/apps/pixelate.html) for converting images to black & white, which might come in handy if you want to Life-ify your own pictures.
+
 ## Setup
 #### Step 1: prerequisites
 You'll need:
