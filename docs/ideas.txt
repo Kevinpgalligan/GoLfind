@@ -1,0 +1,10 @@
+I don't think I'll be able to make prettier results than the approximate versions. I think it's worth fixing up my poor old SAT version, though! Speed up the generation of the SAT file, and potentially search for multiple generations at once.
+
+Predates my work and doesn't use SAT:
+    https://nbickford.wordpress.com/2012/04/15/reversing-the-game-of-life-for-fun-and-profit/
+
+Based on my work, approximate version:
+    https://avinayak.github.io/algorithms/programming/2021/02/19/finding-mona-lisa-in-the-game-of-life.html
+
+Another approximate version:
+    http://hardmath123.github.io/conways-gradient.html
