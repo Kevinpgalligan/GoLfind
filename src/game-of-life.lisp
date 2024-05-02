@@ -1,4 +1,4 @@
-(in-package :mona-lisa-gol)
+(in-package :golfind)
 
 (defconstant LIVE t)
 (defconstant DEAD nil)

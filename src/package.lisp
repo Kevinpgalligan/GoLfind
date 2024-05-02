@@ -1,4 +1,4 @@
-(defpackage :mona-lisa-gol
+(defpackage :golfind
   (:use :cl :sketch)
   (:import-from
    :skippy

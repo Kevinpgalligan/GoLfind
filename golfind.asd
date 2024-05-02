@@ -1,9 +1,9 @@
-(defpackage :mona-lisa-gol-asd
+(defpackage :golfind-asd
   (:use :cl :asdf))
 
-(in-package :mona-lisa-gol-asd)
+(in-package :golfind-asd)
 
-(defsystem mona-lisa-gol
+(defsystem golfind
   :license "MIT"
   :author "Kevin Galligan"
   :depends-on (:sketch :alexandria :png-read :skippy :cl-sat.minisat)

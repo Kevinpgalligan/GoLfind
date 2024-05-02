@@ -1,4 +1,4 @@
-(in-package mona-lisa-gol)
+(in-package :golfind)
 
 (require 'skippy)
 (import '(skippy:make-color-table
